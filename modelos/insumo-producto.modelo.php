@@ -54,12 +54,11 @@ class ModeloInsumoProducto
 	static public function mdlIngresarInsumoProducto($tabla, $datos)
 	{
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla VALUES (null, :nombre_insumo, :cantidad, :id_medicion, :insumo_minimo)");
+		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla VALUES (:id_producto, :id_insumo, :insumo_minimo)");
 
-		$stmt->bindParam(":nombre_insumo", $datos["nombre_insumo"], PDO::PARAM_STR);
-		$stmt->bindParam(":cantidad", $datos["cantidad"], PDO::PARAM_STR);
-		$stmt->bindParam(":id_medicion", $datos["id_medicion"], PDO::PARAM_STR);
-		$stmt->bindParam(":insumo_minimo", $datos["insumo_minimo"], PDO::PARAM_STR);//dudas con las tablas 		
+		$stmt->bindParam(":id_insumo", $datos["id_insumo"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_producto", $datos["id_producto"], PDO::PARAM_STR);
+		$stmt->bindParam(":insumo_minimo", $datos["insumo_minimo"], PDO::PARAM_STR);		
 
 		if ($stmt->execute()) {
 
@@ -122,9 +121,10 @@ class ModeloInsumoProducto
 	{
 		echo "Aqui estamos con $datos";
 
-		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_insumo = :id_insumo");
+		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_insumo = :id_insumo and id_producto = :id_producto");
 
-		$stmt->bindParam(":id_insumo", $datos, PDO::PARAM_INT);
+		$stmt->bindParam(":id_insumo", $datos["id_insumo"], PDO::PARAM_INT);
+		$stmt->bindParam(":id_producto", $datos["id_producto"], PDO::PARAM_INT);
 
 		if ($stmt->execute()) {
 

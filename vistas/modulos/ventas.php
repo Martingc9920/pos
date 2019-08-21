@@ -4,7 +4,7 @@
     
     <h1>
       
-      Administrar ventas Ya Vamonos Profa
+      Administrar ventas 
     
     </h1>
 
@@ -22,19 +22,6 @@
 
     <div class="box">
 
-      <div class="box-header with-border">
-  
-        <a href="crear-venta">
-
-          <button class="btn btn-primary">
-            
-            Agregar venta
-
-          </button>
-
-        </a>
-
-      </div>
 
       <div class="box-body">
         
@@ -45,14 +32,13 @@
          <tr>
            
            <th style="width:10px">#</th>
-           <th>Código factura</th>
+           
            <th>Mesa</th>
-           <th>Mesero</th>
-           <th>Forma de pago</th>
-           <th>Neto</th>
+           <th>id Mesero</th>
+           <th>Mesero</th>           
            <th>Total</th> 
            <th>Fecha</th>
-           <th>Acciones</th>
+           
 
          </tr> 
 
@@ -74,47 +60,15 @@
 
                   <td>'.($key+1).'</td>
 
-                  <td>'.$value["codigo"].'</td>';
+                  <td>'.$value["id_cliente"].'</td>
 
-                  $itemCliente = "id";
-                  $valorCliente = $value["id_cliente"];
+                  <td>'.$value["id_vendedor"].'</td>               
 
-                  $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
-
-                  echo '<td>'.$respuestaCliente["nombre"].'</td>';
-
-                  $itemUsuario = "id";
-                  $valorUsuario = $value["id_vendedor"];
-
-                  $respuestaUsuario = ControladorUsuarios::ctrMostrarUsuarios($itemUsuario, $valorUsuario);
-
-                  echo '<td>'.$respuestaUsuario["nombre"].'</td>
-
-                  <td>'.$value["metodo_pago"].'</td>
-
-                  <td>$ '.number_format($value["neto"],2).'</td>
+                  <td>'.$value["nombre"].'</td>                                    
 
                   <td>$ '.number_format($value["total"],2).'</td>
 
                   <td>'.$value["fecha"].'</td>
-
-                  <td>
-
-                    <div class="btn-group">
-                      
-                      <button class="btn btn-info btnImprimirFactura" codigoVenta="'.$value["codigo"].'">
-
-                        <i class="fa fa-print"></i>
-
-                      </button>
-
-                      <button class="btn btn-warning btnEditarVenta" idVenta="'.$value["id"].'"><i class="fa fa-pencil"></i></button>
-
-                      <button class="btn btn-danger btnEliminarVenta" idVenta="'.$value["id"].'"><i class="fa fa-times"></i></button>
-
-                    </div>  
-
-                  </td>
 
                 </tr>';
             }

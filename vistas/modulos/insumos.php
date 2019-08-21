@@ -60,7 +60,7 @@
                     <td>'.$value["insumo_minimo"].'</td>
                     <td>
                         <div class="btn-group">                            
-                          <button class="btn btn-warning btnEditarInsumo" idInsumo="'.$value["id_insumo"].'" data-toggle="modal" data-target="#modalEditarInsumo"><i class="fa fa-pencil"></i></button>                                               
+                          <button class="btn btn-warning btnEditarInsumo" idInsumo="'.$value["id_insumo"].'" data-toggle="modal" data-target="#modalEditarInsumo"><i class="fa fa-pencil"></i></button> 
                           <button class="btn btn-danger btnEliminarInsumo" idInsumo="'.$value["id_insumo"].'"><i class="fa fa-times"></i></button>                          
                         </div>  
                       </td>

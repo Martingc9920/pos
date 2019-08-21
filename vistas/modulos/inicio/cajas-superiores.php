@@ -83,7 +83,7 @@ $totalProductos = count($productos);
     
       <h3><?php echo number_format($totalClientes); ?></h3>
 
-      <p>Clientes</p>
+      <p>Mesas y Meseros</p>
   
     </div>
     

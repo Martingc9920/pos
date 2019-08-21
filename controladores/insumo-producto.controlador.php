@@ -7,7 +7,7 @@ class ControladorInsumoProducto{
 
 static public function ctrMostrarInsumoProducto($item, $valor){
 
-	$tabla ="insumo_medicion";
+	$tabla ="insumo_producto";
 
 	$respuesta =ModeloInsumoProducto::mdlMostrarInsumoProducto($tabla,$item,$valor);
 
@@ -28,20 +28,19 @@ static public function ctrMostrarMediciones($item, $valor){
 
 
 /*=============================================
-	CREAR Insumo
+	CREAR InsumoProducto
 	=============================================*/
 
 	
 	static public function ctrCrearInsumoProducto()
 	{
-		if (isset($_POST["nuevoNombre"])) {
+		if (isset($_POST["nuevoInsumo"])) {
 
-			$tabla = "insumo";
+			$tabla = "producto_insumo";
 			$datos = array(				
-				"nombre_insumo" => $_POST["nuevoNombre"],
-				"cantidad" => (float)$_POST["nuevaCantidad"],
-				"id_medicion" => $_POST["nuevaMedicion"],
-				"insumo_minimo" =>(float) $_POST["nuevoMinimo"]
+				"id_insumo" => $_POST["nuevoInsumo"],
+				"id_producto" => $_POST["nuevoProducto"],
+				"insumo_minimo" =>(float) $_POST["nuevaCantidad"]
 			);
 
 			var_dump($datos);	
@@ -162,13 +161,16 @@ static public function ctrMostrarMediciones($item, $valor){
 	BORRAR INSUMO
 	=============================================*/
 
-	static public function ctrEliminarInsumoProducto()
+	static public function ctrBorrarInsumoProducto()
 	{
 
 		if (isset($_GET["idInsumo"])) {
 
 			$tabla = "insumo";
-			$datos = $_GET["idInsumo"];						
+			$datos = array(				
+				"id_insumo" => $_GET["idInsumo"],
+				"id_Producto" => $_GET["idProducto"],
+			);						
 
 			$respuestaEliminar = ModeloInsumoProducto::mdlEliminarInsumoProducto($tabla, $datos);
 

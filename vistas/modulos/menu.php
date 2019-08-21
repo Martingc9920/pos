@@ -49,7 +49,7 @@
 
 				<a href="productos">
 
-					<i class="fa fa-product-hunt"></i>
+					<i class="fa fa-cutlery"></i>
 					<span>Productos</span>
 
 				</a>
@@ -95,7 +95,7 @@
 
 				<a href="clientes">
 
-					<i class="fa fa-users"></i>
+					<i class="fa fa-bookmark"></i>
 					<span>Mesas</span>
 
 				</a>
@@ -106,9 +106,20 @@
 
 		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Mesero"){
 
+
+			echo '<li>
+
+				<a href="ventas">
+
+					<i class="fa fa-list-ul"></i>
+					
+					<span>Ventas</span>											
+				</a>
+			</li>';
+			/*
 			echo '<li class="treeview">
 
-				<a href="#">
+				<a href="ventas">
 
 					<i class="fa fa-list-ul"></i>
 					
@@ -119,7 +130,7 @@
 						<i class="fa fa-angle-left pull-right"></i>
 
 					</span>
-
+					
 				</a>
 
 				<ul class="treeview-menu">
@@ -166,7 +177,7 @@
 				echo '</ul>
 
 			</li>';
-
+			*/
 		}
 
 		?>

@@ -64,24 +64,17 @@
             echo '<tr>
 
                     <td>'.($key+1).'</td>
-
                     <td>'.$value["numero"].'</td>
                     <td>'.$value["nombre"].'</td>
-
+                    
                     <td>
-
-                      <div class="btn-group">
-                          
-                        <button class="btn btn-warning btnEditarCliente" data-toggle="modal" data-target="#modalEditarCliente" idCliente="'.$value["id"].'"><i class="fa fa-pencil"></i></button>
-
-                        <button class="btn btn-danger btnEliminarCliente" idCliente="'.$value["id"].'"><i class="fa fa-times"></i></button>
-
+                      <div class="btn-group">                          
+                        <button class="btn btn-warning btnEditarCliente" data-toggle="modal" data-target="#modalEditarCliente" idCliente="'.$value["id_cliente"].'"><i class="fa fa-pencil"></i></button>                                             
+                        <button class="btn btn-danger btnEliminarCliente" idCliente="'.$value["id_cliente"].'"><i class="fa fa-times"></i></button>
                       </div>  
-
                     </td>
-
                   </tr>';
-          
+                  
             }
 
         ?>
@@ -118,7 +111,7 @@ MODAL AGREGAR CLIENTE
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Agregar Mesa y datos del mesero que atiende</h4>
+          <h4 class="modal-title">Agregar Mesa y mesero que atiende</h4>
 
         </div>
 
@@ -131,26 +124,32 @@ MODAL AGREGAR CLIENTE
           <div class="box-body">
 
             <!-- ENTRADA PARA EL NOMBRE -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+            <div class="form-group">              
+              <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa-th"></i></span> 
+                              
+                <input type= "text" class = "form-control input-lg" name="nuevoCliente"  id="nuevoCliente"  
 
-                <input type="text" class="form-control input-lg" name="nuevoCliente" placeholder="Ingresar Mesa" required>
+                 <?php
 
+                 $item = null;
+                 $valor= null;
+                 $mediciones = ControladorClientes::ctrMostrarNumeroMesas($item, $valor);
+                    foreach ($mediciones as $key => $value) {                    
+                      echo ' value="'.$value["mesas"].'"';
+                    }
+                  ?>  
+                 readonly  >
               </div>
-
-            </div>
+            </div>       
             
           <!-- ENTRADA PARA SELECCIONAR MEDICIÓN-->
 
           <div class="form-group">              
                 <div class="input-group">            
-                <span class="input-group-addon"><i class="fa fa-th"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-users"></i></span> 
                 <select class = "form-control input-lg" name="nuevoMesero" >                  
-                  <option id="nuevoMesero"></option>
+                  <option id="nuevoMesero">Seleccione al Mesero</option>
                  <?php
 
                  $item = null;
@@ -186,8 +185,8 @@ MODAL AGREGAR CLIENTE
 
       <?php
 
-     //   $crearCliente = new ControladorClientes();
-       // $crearCliente -> ctrCrearCliente();
+        $crearCliente = new ControladorClientes();
+       $crearCliente -> ctrCrearCliente();
 
       ?>
 
@@ -229,89 +228,35 @@ MODAL EDITAR CLIENTE
 
           <div class="box-body">
 
-            <!-- ENTRADA PARA EL NOMBRE -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="editarCliente" id="editarCliente" required>
-                <input type="hidden" id="idCliente" name="idCliente">
+            <!-- ENTRADA PARA NUMERO -->
+            <div class="form-group">              
+              <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa-th"></i></span>                                               
+                <input type= "text" class = "form-control input-lg" name="editarCliente"  id="editarCliente"  readonly  >
               </div>
-
-            </div>
-
-            <!-- ENTRADA PARA EL DOCUMENTO ID -->
+            </div>       
             
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-key"></i></span> 
+          <!-- ENTRADA PARA SELECCIONAR MESERO-->
 
-                <input type="number" min="0" class="form-control input-lg" name="editarDocumentoId" id="editarDocumentoId" required>
+          <div class="form-group">              
+                <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa-users"></i></span> 
+                <select class = "form-control input-lg" name="editarMesero" > 
+                  <option id="editarMesero"></option>
+                 <?php
 
+                 $item = null;
+                 $valor= null;
+                 $mediciones = ControladorClientes::ctrMostrarMeseros($item, $valor);
+                    foreach ($mediciones as $key => $value) {                    
+                      echo '<option value="'.$value["id"].'">'.$value["nombre"].'</option>';
+                    }
+                  ?>  
+                </select>
               </div>
+            </div>           
 
-            </div>
-
-            <!-- ENTRADA PARA EL EMAIL -->
             
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span> 
-
-                <input type="email" class="form-control input-lg" name="editarEmail" id="editarEmail" required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA EL TELÉFONO -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-phone"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="editarTelefono" id="editarTelefono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA LA DIRECCIÓN -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="editarDireccion" id="editarDireccion"  required>
-
-              </div>
-
-            </div>
-
-             <!-- ENTRADA PARA LA FECHA DE NACIMIENTO -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="editarFechaNacimiento" id="editarFechaNacimiento"  data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required>
-
-              </div>
-
-            </div>
   
           </div>
 
@@ -325,7 +270,7 @@ MODAL EDITAR CLIENTE
 
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <button type="submit" class="btn btn-primary" name="editar" >Guardar Mesa</button>
 
         </div>
 
@@ -333,8 +278,8 @@ MODAL EDITAR CLIENTE
 
       <?php
 
-      //  $editarCliente = new ControladorClientes();
-        //$editarCliente -> ctrEditarCliente();
+      $editarCliente = new ControladorClientes();
+      $editarCliente -> ctrEditarCliente();
 
       ?>
 
@@ -348,8 +293,8 @@ MODAL EDITAR CLIENTE
 
 <?php
 
-//  $eliminarCliente = new ControladorClientes();
-  //$eliminarCliente -> ctrEliminarCliente();
+  $eliminarCliente = new ControladorClientes();
+  $eliminarCliente -> ctrEliminarCliente();
 
 ?>
 

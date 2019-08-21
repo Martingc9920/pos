@@ -10,7 +10,7 @@
     <div class="box">
 
       <div class="box-header with-border">  
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarCategoria">          
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarInsumoProducto">          
           Agregar relación <!--Boton-->
         </button>
       </div>
@@ -26,6 +26,7 @@
            <th>id</th>
            <th>insumo</th>
            <th>Relación</th>
+           <th>Acción</th>
          </tr> 
         </thead>
 
@@ -38,19 +39,18 @@
             foreach ($insumo_producto as $key => $value) {          
               echo  '<tr>
                       <td>'.($key+1).'</td>
-                      <td class="text-uppercase">'.$value["nombre_categoria"].'</td>
-                      <td class="text-uppercase">'.$value["id_categoria"].'</td>
+                      <td class="text-uppercase">'.$value["id_producto"].'</td>
                       <td class="text-uppercase">'.$value["descripcion"].'</td>
+                      <td class="text-uppercase">'.$value["id_insumo"].'</td>
+                      <td class="text-uppercase">'.$value["nombre_insumo"].'</td>
+                      <td class="text-uppercase">'.$value["gasto_de_insumo"].'</td>
                       <td>
-                        <div class="btn-group">                            
-                          <button class="btn btn-warning btnEditarCategoria" idCategoria="'.$value["id_categoria"].'" data-toggle="modal" data-target="#modalEditarCategoria"><i class="fa fa-pencil"></i></button>
-                     ';
-                          if($_SESSION["administrador"] == 1){
-                            echo '<button class="btn btn-danger btnEliminarCategoria" idCategoria="'.$value["id_categoria"].'"><i class="fa fa-times"></i></button>';  
-                          }
-                        echo '</div>  
-                      </td>
-                    </tr>';
+                      <div class="btn-group">                            
+                        <button class="btn btn-warning btnEditarInsumoProducto" idInsumo="'.$value["id_insumo"].'"  idProducto="'.$value["id_producto"].'" data-toggle="modal" data-target="#modalEditarInsumoProducto"><i class="fa fa-pencil"></i></button>                                                                                               
+                        <button class="btn btn-danger btnEliminarInsumoProducto" idInsumo="'.$value["id_insumo"].'"  idProducto="'.$value["id_producto"].'"><i class="fa fa-times"></i></button>                          
+                      </div>  
+                    </td>
+                  </tr>';
             }
           ?>          
         </tbody>
@@ -64,7 +64,7 @@
 MODAL AGREGAR CATEGORÍA
 ======================================-->
 
-<div id="modalAgregarCategoria" class="modal fade" role="dialog">
+<div id="modalAgregarInsumoProducto" class="modal fade" role="dialog">
   
   <div class="modal-dialog">
     <div class="modal-content">
@@ -86,21 +86,61 @@ MODAL AGREGAR CATEGORÍA
         <div class="modal-body">
           <div class="box-body">
 
-            <!-- ENTRADA PARA EL NOMBRE -->            
+             <!-- ENTRADA PARA SELECCIONAR MEDICIÓN-->
 
-            <div class="form-group">              
-              <div class="input-group">              
-                <span class="input-group-addon"><i class="fa fa-th"></i></span> 
-                <input type="text" class="form-control input-lg" name="nuevaCategoria" placeholder="Ingresar categoría" required>
+             <div class="form-group">              
+              <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa fa-lemon-o"></i></span> 
+                <select class = "form-control input-lg" name="nuevoInsumo" id="nuevoInsumo">                  
+                  <option value="">Selecionar Insumo</option>
+                 <?php
+
+                 $item = null;
+                 $valor= null;
+                 $mediciones = ControladorInsumos::ctrMostrarInsumos($item, $valor);
+                    foreach ($mediciones as $key => $value) {                    
+                      echo '<option value="'.$value["id_insumo"].'">'.$value["nombre_insumo"].'</option>';
+                    }
+                  ?>  
+                </select>
               </div>
+            </div>        
+
+            
+
+              <!-- ENTRADA PARA PRODUCTO-->
+
+              <div class="form-group">              
+              <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa-cutlery"></i></span> 
+                <select class = "form-control input-lg" name="nuevoProducto" id="nuevoProducto">                  
+                  <option value="">Selecionar Producto</option>
+                 <?php
+
+                 $item = null;
+                 $valor= null;
+                 $orden = "id";
+                 $mediciones = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
+                 //echo("<script>console.log('PHP Controlador: " . $mediciones . "');</script>");
+                    foreach ($mediciones as $key => $value) {                    
+                      echo '<option value="'.$value["id"].'">'.$value["descripcion"].'</option>';
+                    }
+                  ?>  
+                </select>
+              </div>
+            </div>        
+
+            <!-- ENTRADA PARA CANTIDAD DE REALACION -->
+
+            <div class="form-group row">
+                <div class="col-xs-12">                
+                  <div class="input-group">                  
+                    <span class="input-group-addon"><i class="fa fa-arrow-up"></i></span> 
+                    <input type="number" class="form-control input-lg" id="nuevaCantidad" name="nuevaCantidad" step="any" min="0" placeholder="Relación" required>
+                  </div>
+                </div>                                    
             </div>
 
-            <div class="form-group">              
-              <div class="input-group">              
-                <span class="input-group-addon"><i class="fa fa-align-center"></i></span> 
-                <input type="text" class="form-control input-lg" name="nuevaDescripcion" placeholder="Descripción" required>
-              </div>
-            </div>
 
           </div>
         </div>
@@ -111,14 +151,14 @@ MODAL AGREGAR CATEGORÍA
 
         <div class="modal-footer">
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
-          <button type="submit" class="btn btn-primary">Guardar categoría</button>
+          <button type="submit" class="btn btn-primary">Guardar relación</button>
         </div>
 
         
          <!--Conexión con la BDD-->
         <?php
-          $crearCategoria = new ControladorCategorias();
-          $crearCategoria -> ctrCrearCategoria();
+          $crearInsumoProducto = new ControladorInsumoProducto();
+          $crearInsumoProducto -> ctrCrearInsumoProducto();
         ?> 
 
       </form>
@@ -131,7 +171,7 @@ MODAL AGREGAR CATEGORÍA
 MODAL EDITAR CATEGORÍA
 ======================================-->
 
-<div id="modalEditarCategoria" class="modal fade" role="dialog">
+<div id="modalEditarInsumoProducto" class="modal fade" role="dialog">
     <div class="modal-dialog">
     <div class="modal-content">
       <form role="form" method="post">
@@ -152,22 +192,61 @@ MODAL EDITAR CATEGORÍA
         <div class="modal-body">
           <div class="box-body">
 
-            <!-- ENTRADA PARA EL NOMBRE -->        
-            <div class="form-group">              
-              <div class="input-group">              
-                <span class="input-group-addon"><i class="fa fa-th"></i></span>                 
-                <input type="text" class="form-control input-lg" name="editarCategoria" id="editarCategoria" placeholder="Título" required>                
-                <input type="hidden"  name="idCategoria" id="idCategoria" required>                                
-              </div>           
+              <!-- ENTRADA PARA SELECCIONAR MEDICIÓN-->
+
+              <div class="form-group">              
+              <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa fa-lemon-o"></i></span> 
+                <select class = "form-control input-lg" name="editarInsumo" id="editarInsumo">                  
+                  <option value="">Selecionar Insumo</option>
+                 <?php
+
+                 $item = null;
+                 $valor= null;
+                 $mediciones = ControladorInsumos::ctrMostrarInsumos($item, $valor);
+                    foreach ($mediciones as $key => $value) {                    
+                      echo '<option value="'.$value["id_insumo"].'">'.$value["nombre_insumo"].'</option>';
+                    }
+                  ?>  
+                </select>
+              </div>
+            </div>        
+
+            
+
+              <!-- ENTRADA PARA PRODUCTO-->
+
+              <div class="form-group">              
+              <div class="input-group">            
+                <span class="input-group-addon"><i class="fa fa-cutlery"></i></span> 
+                <select class = "form-control input-lg" name="editarProducto" id="editarProducto">                  
+                  <option value="">Selecionar Producto</option>
+                 <?php
+
+                 $item = null;
+                 $valor= null;
+                 $orden = "id";
+                 $mediciones = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
+                 //echo("<script>console.log('PHP Controlador: " . $mediciones . "');</script>");
+                    foreach ($mediciones as $key => $value) {                    
+                      echo '<option value="'.$value["id"].'">'.$value["descripcion"].'</option>';
+                    }
+                  ?>  
+                </select>
+              </div>
+            </div>        
+
+            <!-- ENTRADA PARA CANTIDAD DE REALACION -->
+
+            <div class="form-group row">
+                <div class="col-xs-12">                
+                  <div class="input-group">                  
+                    <span class="input-group-addon"><i class="fa fa-arrow-up"></i></span> 
+                    <input type="number" class="form-control input-lg" id="editarCantidad" name="editarCantidad" step="any" min="0" placeholder="Relación" required>
+                  </div>
+                </div>                                    
             </div>
 
-            <!-- ENTRADA PARA EL NOMBRE --> 
-            <div class="form-group">              
-              <div class="input-group">              
-                <span class="input-group-addon"><i class="fa fa-align-center"></i></span> 
-                <input type="text" class="form-control input-lg" name="editarDescripcion" id="editarDescripcion" placeholder="Descripción" required>
-              </div>
-            </div>
 
           </div>
         </div>
@@ -185,8 +264,8 @@ MODAL EDITAR CATEGORÍA
 
       <?php
         
-          //$editarCategoria = new ControladorCategorias();
-          //$editarCategoria -> ctrEditarCategoria();
+          $editarInsumoProducto = new ControladorInsumoProducto();
+          $editarInsumoProducto -> ctrEditarInsumoProducto();
             
           
 
@@ -199,8 +278,8 @@ MODAL EDITAR CATEGORÍA
 
 <!--Conexión con la BDD-->
 <?php    
-  //$borrarCategoria = new ControladorCategorias();
-  //$borrarCategoria -> ctrBorrarCategoria();
+  $borrarInsumoProducto = new ControladorInsumoProducto();
+  $borrarInsumoProducto -> ctrBorrarInsumoProducto();
 
 ?>
 
